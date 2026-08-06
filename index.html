@@ -17,9 +17,9 @@
   <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png" />
 
-  <!-- Mapbox GL JS -->
-  <link href="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.css" rel="stylesheet" />
-  <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.0/mapbox-gl.js"></script>
+  <!-- MapLibre GL JS (open-source, no account/token) -->
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -69,10 +69,6 @@
         </nav>
       </section>
 
-      <!-- Shown only if the Mapbox token is missing -->
-      <div id="token-notice" hidden>
-        <p>Add your Mapbox token in <code>app.js</code> to load the map.</p>
-      </div>
     </div>
   </div>
 
