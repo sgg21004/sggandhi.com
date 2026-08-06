@@ -1,31 +1,27 @@
 # sggandhi.com
 
-Scroll-driven cinematic descent from a birds-eye view of New York City down
-into the DUMBO / Washington St frame (the Manhattan Bridge between the brick
-buildings), then a crossfade into live footage.
-
-## Setup
-1. Get a free **Mapbox** public token at https://account.mapbox.com/ (starts with `pk.`).
-2. Paste it into `MAPBOX_TOKEN` at the top of `app.js`.
-3. (optional) Add the arrival clip and set `ARRIVAL_VIDEO` in `app.js`.
-
-Without a token the page shows a notice instead of the map.
+A dreamy purple dreamscape you pan across as you scroll — lilac sky, a huge
+soft moon, floating arches / monoliths / layered discs receding into fog, with
+glass chat-bubbles that drift in. Original Three.js scene, no external assets.
 
 ## How it works
-- `index.html` — a tall `#scroll` driver with a pinned `#stage` (map + video + overlays).
-- `app.js` — maps scroll progress `0→1` onto interpolated camera `KEYFRAMES`
-  (center / zoom / pitch / bearing) and fades the overlays + arrival video.
-- `style.css` — layout, scrim, and the name/arrival reveal.
+- `index.html` — tall `#scroll` driver + pinned `#stage` (Three.js canvas, fixed
+  name, chat bubbles). Three.js loaded via ESM importmap.
+- `app.js` — builds the scene and maps scroll progress `0→1` to a horizontal
+  camera pan; cursor adds parallax; bubbles reveal at scroll thresholds.
+  `?p=0.5` pins the pan for tuning.
+- `style.css` — palette, glass bubbles, grain, fixed identity.
 
-Tune the descent by editing `KEYFRAMES` in `app.js`.
+Tune the world by editing the `place(...)` layout and `CAM_START/CAM_END` in `app.js`.
 
 ## Run locally
 ```bash
-python3 -m http.server 8000   # then open http://localhost:8000
+python3 -m http.server 8000   # http://localhost:8000
 ```
 
 ## Deploy
 Static — GitHub Pages (auto-deploys from `main`). Point `sggandhi.com` via DNS.
 
-## Previous design
-The original clean single-page site lives on the **`minimal-v1`** branch.
+## Earlier directions (preserved in git)
+- `minimal-v1` branch — the original clean single-page site.
+- `redesign` branch — the NYC → DUMBO scroll-map version.
