@@ -74,22 +74,20 @@ const mat = new THREE.MeshStandardMaterial({ color: 0xdfe2ea, metalness: 1.0, ro
 let shaderRef = null;
 mat.onBeforeCompile = (shader) => {
   shader.uniforms.uTime = { value: 0 };
-  shader.uniforms.uAmp  = { value: 0.34 };
-  shader.uniforms.uFreq = { value: 1.15 };
-  shader.uniforms.uWarp = { value: 0.0 };
+  shader.uniforms.uAmp  = { value: 0.18 };
+  shader.uniforms.uFreq = { value: 1.5 };
   shader.vertexShader = `
-    uniform float uTime; uniform float uAmp; uniform float uFreq; uniform float uWarp;
+    uniform float uTime; uniform float uAmp; uniform float uFreq;
     ${SNOISE}
   ` + shader.vertexShader.replace(
     '#include <begin_vertex>',
     `#include <begin_vertex>
-     float t = uTime * 0.28;
+     float t = uTime * 0.22;
+     // two smooth octaves of noise → gentle mercury undulation, always rounded
      float n  = snoise(vec3(position * uFreq + vec3(0.0, t, 0.0)));
-     float n2 = snoise(vec3(position * (uFreq * 2.3) - vec3(t * 0.7)));
-     float d = n * uAmp + n2 * uAmp * 0.35;
+     float n2 = snoise(vec3(position * (uFreq * 1.9) - vec3(t * 0.6)));
+     float d = n * uAmp + n2 * uAmp * 0.3;
      transformed += normal * d;
-     // scroll "warp" — pinch the form along Y as it twists
-     transformed.xz *= 1.0 + uWarp * 0.25 * sin(position.y * 3.0 + t);
     `
   );
   shaderRef = shader;
@@ -121,18 +119,17 @@ function frame(now) {
   const time = (now - t0) / 1000;
   const p = progress();
 
-  // morph + twist
+  // morph + twist — stays a rounded liquid sphere throughout
   if (shaderRef) {
     shaderRef.uniforms.uTime.value = reduce ? 0 : time;
-    shaderRef.uniforms.uAmp.value  = lerp(0.30, 0.16, p);   // calms as it tightens
-    shaderRef.uniforms.uFreq.value = lerp(1.05, 2.1, p);    // finer detail deeper in
-    shaderRef.uniforms.uWarp.value = p;
+    shaderRef.uniforms.uAmp.value  = lerp(0.20, 0.13, p);   // gently calms as you scroll
+    shaderRef.uniforms.uFreq.value = lerp(1.35, 2.0, p);    // slightly finer ripples deeper in
   }
   mx += (tmx - mx) * 0.05;
   my += (tmy - my) * 0.05;
-  blob.rotation.y = p * Math.PI * 2.2 + mx * 0.6 + (reduce ? 0 : time * 0.06);
-  blob.rotation.x = -my * 0.5 + Math.sin(p * Math.PI) * 0.3;
-  camera.position.z = lerp(6.0, 4.6, p);   // dolly in slightly
+  blob.rotation.y = p * Math.PI * 1.6 + mx * 0.5 + (reduce ? 0 : time * 0.05);
+  blob.rotation.x = -my * 0.35;
+  camera.position.z = lerp(5.6, 4.8, p);   // subtle dolly in
 
   // shift accent lights through the scroll for changing highlights
   cool.position.x = -5 + Math.sin(time * 0.3) * 1.5;
