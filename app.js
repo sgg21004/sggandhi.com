@@ -6,8 +6,9 @@
 // no API key, no payment.
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Path to the looping "arrival" clip (DUMBO / Washington St). Set once we have it.
-const ARRIVAL_VIDEO = ''; // e.g. 'media/dumbo.mp4'
+// The arrival is a still (media/dumbo.jpg) brought to life with CSS motion.
+// To swap in real footage later: replace #arrival's contents with a <video>
+// and this logic still crossfades it in.
 
 // ── Camera keyframes: interpolated by scroll progress (0 → 1) ────────────────
 // DUMBO Washington St ≈ the famous frame looking north to the Manhattan Bridge.
@@ -83,8 +84,6 @@ const map = new maplibregl.Map({
   fadeDuration: 0,
 });
 
-if (ARRIVAL_VIDEO) arrivalEl.src = ARRIVAL_VIDEO;
-
 let ready = false;
 map.on('load', () => { ready = true; render(); });
 
@@ -105,15 +104,10 @@ function render() {
   introEl.style.opacity = introFade;
   cueEl.style.opacity = introFade;
 
-  // arrival footage + name block fade in at the end
+  // arrival still + name block crossfade in at the end
   const arrive = clamp01((p - 0.82) / 0.16);
-  arrivalEl.style.opacity = ARRIVAL_VIDEO ? arrive : 0;
-  if (arrive > 0.05) {
-    contentEl.classList.add('show');
-    if (ARRIVAL_VIDEO && arrivalEl.paused) arrivalEl.play().catch(() => {});
-  } else {
-    contentEl.classList.remove('show');
-  }
+  arrivalEl.style.opacity = arrive;
+  contentEl.classList.toggle('show', arrive > 0.05);
 }
 
 window.addEventListener('scroll', onScroll, { passive: true });

@@ -30,8 +30,12 @@
       <!-- The live NYC map (the journey) -->
       <div id="map"></div>
 
-      <!-- The arrival: looping live footage of the DUMBO / Manhattan Bridge frame -->
-      <video id="arrival" muted loop playsinline preload="auto" aria-hidden="true"></video>
+      <!-- The arrival: the DUMBO / Manhattan Bridge frame, brought to life with
+           a slow push-in + drifting atmospheric haze. -->
+      <div id="arrival" aria-hidden="true">
+        <img src="media/dumbo.jpg" alt="The Manhattan Bridge framed between brick buildings on Washington Street, DUMBO, Brooklyn" />
+        <div class="haze"></div>
+      </div>
 
       <!-- soft vignette + legibility gradient -->
       <div id="scrim"></div>
